@@ -44,7 +44,7 @@ cp -r maats_optimization/src/* $FLAIR_ROOT/flair-build/build/demos/charge-suspen
 cp maats_optimization/CMakeLists.txt $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/
 
 # Rebuild the modified demo
-cd $HOME/flair-build/demos/charge-suspendue
+cd $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/build
 make install
 ```
 
@@ -53,7 +53,10 @@ make install
 ### Server
 ```bash
 cd server
-make -j$(nproc)  # Ensure SNOPT_ROOT is set
+# If SNOPT is not in $HOME/SNOPT7, specify location:
+make SNOPT_ROOT=/path/to/your/snopt -j$(nproc)
+# Or use default location:
+make -j$(nproc)
 ```
 
 ## Network Configuration
