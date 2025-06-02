@@ -16,9 +16,9 @@ Request from: https://ccom.ucsd.edu/~optimizers/downloads/
 
 ```bash
 # After downloading
-tar -xf snopt_linux64.tgz -C $HOME/
-export SNOPT_ROOT=$HOME/snopt
-export SNOPT_LICENSE=$SNOPT_ROOT/snopt.lic
+unzip libsnopt7_cpp.zip.tgz -d $HOME/ # Or another directory
+export SNOPT_ROOT=$HOME/SNOPT7
+export SNOPT_LICENSE=$SNOPT_ROOT/snopt7.lic
 ```
 
 ### 2. VRPN (Motion Capture)
@@ -38,10 +38,10 @@ git clone https://github.com/Lambert00/maats_optimization.git
 cd maats_optimization
 
 # Replace existing charge-suspendue demo files with modified versions
-rm -rf $HOME/flair-build/demos/charge-suspendue/uav/src/*
-rm -f $HOME/flair-build/demos/charge-suspendue/uav/CMakeLists.txt
-cp -r maats_optimization/src/* $HOME/flair-build/demos/charge-suspendue/uav/src/
-cp maats_optimization/CMakeLists.txt $HOME/flair-build/demos/charge-suspendue/uav/
+rm -rf $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/src/*
+rm -f $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/CMakeLists.txt
+cp -r maats_optimization/src/* $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/src/
+cp maats_optimization/CMakeLists.txt $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/
 
 # Rebuild the modified demo
 cd $HOME/flair-build/demos/charge-suspendue
@@ -70,17 +70,15 @@ make -j$(nproc)  # Ensure SNOPT_ROOT is set
 ### Step 1: Start Drone Clients
 **On Drone_0 (Master):**
 ```bash
-cd $HOME/flair-install/bin/demos/charge-suspendue/uav/
-./charge-suspendue_drone0
+cd charge_opt/
+./ChargeSuspendue.sh
 ```
 
 **On Drone_1:**
 ```bash
-cd $HOME/flair-install/bin/demos/charge-suspendue/uav/
-./charge-suspendue_drone1
+cd charge_opt/
+./ChargeSuspendue.sh
 ```
-
-Verify: Both show "Connected to ground station" and parameters loaded.
 
 ### Step 2: Start Optimization Server
 ```bash
@@ -137,7 +135,7 @@ Unicast test SUCCEEDED
 | `-n 2` | Number of drones | 2 |
 | `-m 5.0` | Cable separation weight | 5.0 |
 | `-b 0.1` | Direction smoothness | 0.1 |
-| `-r 0.1` | Max direction rate (rad/s) | 0.1 |
+| `-r 0.35` | Max direction rate (rad/s) | 0.35 |
 
 ## GUI Controls
 
