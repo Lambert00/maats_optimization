@@ -44,7 +44,7 @@ cp -r src/* $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/src/
 cp CMakeLists.txt $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/
 
 # Rebuild the modified demo
-cd $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/build
+cd $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/build_armv7a_neon
 make install
 ```
 
