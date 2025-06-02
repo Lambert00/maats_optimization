@@ -1,39 +1,42 @@
-# Compiler settings
-CXX = g++
-CXXFLAGS = -std=c++17 -O2 -Wall -Wno-unused-parameter -Wno-deprecated-copy -pthread
-CXXFLAGS_REAL = -std=c++17 -O2 -Wall -Wextra -pthread -fPIC
+PROJ_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 
-# SNOPT settings
-SNOPT_INCLUDE = -I/home/user/optimization-libraries/SNOPT7
-SNOPT_LIBS = -L/home/user/optimization-libraries/SNOPT7 -lsnopt7_cpp -lgfortran
+# ───── Library locations (defaults) ────────────────────────────────────────────────
+SNOPT_ROOT ?= $(HOME)/SNOPT7
+VRPN_ROOT  ?= /usr/local
+EIGEN_ROOT ?= $(PROJ_ROOT)/eigen    # ships with this repo
 
-# VRPN settings
-VRPN_INCLUDE = -I/usr/local/include
-VRPN_LIBS = -L/usr/local/lib -lvrpn -lquat
+# ───── Compiler & flags ────────────────────────────────────────────────────────────
+CXX      := g++
+CXXFLAGS := -std=c++17 -O2 -Wall -Wextra -pthread -fPIC
 
-# Eigen settings
-EIGEN_INCLUDE = -I/home/user/maats_optimization/server/eigen
+SNOPT_INC := -I$(SNOPT_ROOT)
+SNOPT_LIB := -L$(SNOPT_ROOT) -lsnopt7_cpp -lgfortran
 
-MAATS_TARGET = MAATSTensionOptimizer
-MAATS_SRC = MAATSTensionOptimizer.cpp
+VRPN_INC  := -I$(VRPN_ROOT)/include
+VRPN_LIB  := -L$(VRPN_ROOT)/lib -lvrpn -lquat
 
-MAATS_OBJ = $(MAATS_SRC:.cpp=.o)
+EIGEN_INC := -I$(EIGEN_ROOT)
 
-all: maats
+LDFLAGS   := $(SNOPT_LIB) $(VRPN_LIB) -pthread -Wl,-rpath,$(SNOPT_ROOT)
 
-maats: $(MAATS_TARGET)
+# ───── Sources & target ────────────────────────────────────────────────────────────
+TARGET := MAATSTensionOptimizer
+SRC    := MAATSTensionOptimizer.cpp
+OBJ    := $(SRC:.cpp=.o)
 
-$(MAATS_TARGET): $(MAATS_OBJ)
-	$(CXX) $(CXXFLAGS_REAL) $^ -o $@ $(SNOPT_LIBS) $(VRPN_LIBS) -pthread -Wl,-rpath,/home/user/optimization-libraries/SNOPT7
+# ───── Build rules ────────────────────────────────────────────────────────────────
+all: $(TARGET)
 
-$(MAATS_OBJ): $(MAATS_SRC)
-	$(CXX) $(CXXFLAGS_REAL) $(SNOPT_INCLUDE) $(VRPN_INCLUDE) $(EIGEN_INCLUDE) -c $< -o $@
+$(TARGET): $(OBJ)
+	$(CXX) $(OBJ) -o $@ $(LDFLAGS)
+
+$(OBJ): $(SRC)
+	$(CXX) $(CXXFLAGS) $(SNOPT_INC) $(VRPN_INC) $(EIGEN_INC) -c $< -o $@
 
 clean:
-	rm -f $(MAATS_OBJ) $(MAATS_TARGET)
+	rm -f $(OBJ) $(TARGET)
 
-install: $(MAATS_TARGET)
-	mkdir -p $(DESTDIR)/usr/local/bin
-	cp $(MAATS_TARGET) $(DESTDIR)/usr/local/bin/
+install: $(TARGET)
+	install -Dm755 $(TARGET) $(DESTDIR)/usr/local/bin/$(TARGET)
 
-.PHONY: all maats clean install run-maats
+.PHONY: all clean install
