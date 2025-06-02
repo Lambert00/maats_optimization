@@ -40,8 +40,8 @@ cd maats_optimization
 # Replace existing charge-suspendue demo files with modified versions
 rm -rf $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/src/*
 rm -f $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/CMakeLists.txt
-cp -r maats_optimization/src/* $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/src/
-cp maats_optimization/CMakeLists.txt $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/
+cp -r src/* $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/src/
+cp CMakeLists.txt $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/uav/
 
 # Rebuild the modified demo
 cd $FLAIR_ROOT/flair-build/build/demos/charge-suspendue/build
