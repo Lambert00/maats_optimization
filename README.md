@@ -34,18 +34,18 @@ Follow installation guide: https://gitlab.utc.fr/uav-hds/flair/flair-src/-/wikis
 
 ```bash
 # After Fl-AIR installation, clone this repository
-git clone https://github.com/your-repo/maats_optimization.git
+git clone https://github.com/Lambert00/maats_optimization.git
 cd maats_optimization
 
 # Replace existing charge-suspendue demo files with modified versions
 rm -rf $HOME/flair-build/demos/charge-suspendue/uav/src/*
 rm -f $HOME/flair-build/demos/charge-suspendue/uav/CMakeLists.txt
-cp -r charge-suspendue/uav/src/* $HOME/flair-build/demos/charge-suspendue/uav/src/
-cp charge-suspendue/uav/CMakeLists.txt $HOME/flair-build/demos/charge-suspendue/uav/
+cp -r maats_optimization/src/* $HOME/flair-build/demos/charge-suspendue/uav/src/
+cp maats_optimization/CMakeLists.txt $HOME/flair-build/demos/charge-suspendue/uav/
 
 # Rebuild the modified demo
-cd $HOME/flair-build/demos/charge-suspendue/uav
-make install -j$(nproc)
+cd $HOME/flair-build/demos/charge-suspendue
+make install
 ```
 
 ## Building
