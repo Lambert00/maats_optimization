@@ -3,7 +3,7 @@ PROJ_ROOT := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 # ───── Library locations (defaults) ────────────────────────────────────────────────
 SNOPT_ROOT ?= $(HOME)/SNOPT7
 VRPN_ROOT  ?= /usr/local
-EIGEN_ROOT ?= $(PROJ_ROOT)/eigen    # ships with this repo
+EIGEN_ROOT ?= $(PROJ_ROOT)/eigen
 
 # ───── Compiler & flags ────────────────────────────────────────────────────────────
 CXX      := g++
@@ -21,20 +21,29 @@ LDFLAGS   := $(SNOPT_LIB) $(VRPN_LIB) -pthread -Wl,-rpath,$(SNOPT_ROOT)
 
 # ───── Sources & target ────────────────────────────────────────────────────────────
 TARGET := MAATSTensionOptimizer
+TARGET_SIM := MAATSTensionOptimizerSimulator
 SRC    := MAATSTensionOptimizer.cpp
+SRC_SIM := MAATSTensionOptimizerSimulator.cpp
 OBJ    := $(SRC:.cpp=.o)
+OBJ_SIM := $(SRC_SIM:.cpp=.o)
 
 # ───── Build rules ────────────────────────────────────────────────────────────────
-all: $(TARGET)
+all: $(TARGET) $(TARGET_SIM)
 
 $(TARGET): $(OBJ)
 	$(CXX) $(OBJ) -o $@ $(LDFLAGS)
 
+$(TARGET_SIM): $(OBJ_SIM)
+	$(CXX) $(OBJ_SIM) -o $@ $(LDFLAGS)
+
 $(OBJ): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SNOPT_INC) $(VRPN_INC) $(EIGEN_INC) -c $< -o $@
 
+$(OBJ_SIM): $(SRC_SIM)
+	$(CXX) $(CXXFLAGS) $(SNOPT_INC) $(VRPN_INC) $(EIGEN_INC) -c $< -o $@
+
 clean:
-	rm -f $(OBJ) $(TARGET)
+	rm -f $(OBJ) $(OBJ_SIM) $(TARGET) $(TARGET_SIM)
 
 install: $(TARGET)
 	install -Dm755 $(TARGET) $(DESTDIR)/usr/local/bin/$(TARGET)
